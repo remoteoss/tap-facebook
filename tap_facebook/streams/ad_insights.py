@@ -18,9 +18,12 @@ from singer_sdk import typing as th
 from singer_sdk.streams.core import REPLICATION_INCREMENTAL, Stream
 
 EXCLUDED_FIELDS = [
-    "total_postbacks",
+    "__dict__",
+    "__doc__",
+    "__module__",
     "adset_end",
     "adset_start",
+    "age_targeting",
     "conversion_lead_rate",
     "cost_per_conversion_lead",
     "cost_per_dda_countby_convs",
@@ -29,8 +32,15 @@ EXCLUDED_FIELDS = [
     "creative_media_type",
     "dda_countby_convs",
     "dda_results",
+    "estimated_ad_recall_rate_lower_bound",
+    "estimated_ad_recall_rate_upper_bound",
+    "estimated_ad_recallers_lower_bound",
+    "estimated_ad_recallers_upper_bound",
+    "gender_targeting",
     "instagram_upcoming_event_reminders_set",
     "interactive_component_tap",
+    "labels",
+    "location",
     "marketing_messages_cost_per_delivered",
     "marketing_messages_cost_per_link_btn_click",
     "marketing_messages_spend",
@@ -42,9 +52,6 @@ EXCLUDED_FIELDS = [
     "unique_video_continuous_2_sec_watched_actions",
     "unique_video_view_15_sec",
     "video_thruplay_watched_actions",
-    "__module__",
-    "__doc__",
-    "__dict__",
 ]
 
 SLEEP_TIME_INCREMENT = 5
@@ -65,7 +72,9 @@ class AdsInsightStream(Stream):
 
     @property
     def primary_keys(self) -> list[str] | None:
-        return ["date_start", "account_id", "ad_id"] + self._report_definition["breakdowns"]
+        return ["date_start", "account_id", "ad_id"] + self._report_definition[
+            "breakdowns"
+        ]
 
     @primary_keys.setter
     def primary_keys(self, new_value: list[str] | None) -> None:
@@ -94,7 +103,9 @@ class AdsInsightStream(Stream):
                 for f in list(AdsHistogramStats.Field.__dict__):
                     if f not in EXCLUDED_FIELDS:
                         clean_field = f.replace("field_", "")
-                        if AdsHistogramStats._field_types[clean_field] == "string":  # noqa: SLF001
+                        if (
+                            AdsHistogramStats._field_types[clean_field] == "string"
+                        ):  # noqa: SLF001
                             sub_props.append(th.Property(clean_field, th.StringType()))
                         else:
                             sub_props.append(
@@ -193,7 +204,9 @@ class AdsInsightStream(Stream):
 
     def _get_selected_columns(self) -> list[str]:
         columns = [
-            keys[1] for keys, data in self.metadata.items() if data.selected and len(keys) > 0
+            keys[1]
+            for keys, data in self.metadata.items()
+            if data.selected and len(keys) > 0
         ]
         if not columns and self.name == "adsinsights_default":
             columns = list(self.schema["properties"])
