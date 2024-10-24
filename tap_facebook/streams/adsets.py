@@ -225,8 +225,41 @@ class AdsetsStream(IncrementalFacebookStream):
                     ObjectType(
                         Property("countries", ArrayType(StringType)),
                         Property("location_types", ArrayType(StringType)),
+                        Property(
+                            "cities",
+                            ArrayType(
+                                ObjectType(
+                                    Property("country", StringType),
+                                    Property("distance_unit", StringType),
+                                    Property("key", StringType),
+                                    Property("name", StringType),
+                                    Property("radius", IntegerType),
+                                    Property("region", StringType),
+                                    Property("region_id", StringType),
+                                ),
+                            ),
+                        ),
+                        Property(
+                            "regions",
+                            ArrayType(
+                                ObjectType(
+                                    Property("key", StringType),
+                                    Property("name", StringType),
+                                    Property("country", StringType),
+                                ),
+                            ),
+                        ),
                     ),
                 ),
+                Property(
+                    "flexible_spec",
+                    ObjectType(
+                        Property("behaviors", ArrayType(ObjectType())),
+                        Property("work_positions", ArrayType(ObjectType())),
+                        Property("interests", ArrayType(ObjectType())),
+                    ),
+                ),
+                Property("targeting_automation", StringType),
                 Property("genders", ArrayType(IntegerType)),
                 Property("brand_safety_content_filter_levels", ArrayType(StringType)),
                 Property("publisher_platforms", ArrayType(StringType)),
