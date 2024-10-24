@@ -278,16 +278,14 @@ class AdsetsStream(IncrementalFacebookStream):
                 Property("excluded_user_device", ArrayType(StringType)),
                 Property(
                     "exclusions",
-                    ArrayType(
-                        ObjectType(
-                            Property(
-                                "industries",
-                                ArrayType(
-                                    ObjectType(
-                                        Property("id", StringType),
-                                        Property("name", StringType),
-                                    )
-                                ),
+                    ObjectType(
+                        Property(
+                            "industries",
+                            ArrayType(
+                                ObjectType(
+                                    Property("id", StringType),
+                                    Property("name", StringType),
+                                )
                             ),
                         ),
                     ),
