@@ -190,7 +190,7 @@ class TapFacebook(Tap):
             "limit",
             th.IntegerType,
             description="The maximum number of records to retrieve per request.",
-            default=100,
+            default=2000,
         ),
     ).to_dict()
 
