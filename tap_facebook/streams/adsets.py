@@ -276,7 +276,22 @@ class AdsetsStream(IncrementalFacebookStream):
                 Property("excluded_publisher_categories", ArrayType(StringType)),
                 Property("excluded_publisher_list_ids", ArrayType(StringType)),
                 Property("excluded_user_device", ArrayType(StringType)),
-                Property("exclusions", ArrayType(ObjectType())),
+                Property(
+                    "exclusions",
+                    ArrayType(
+                        ObjectType(
+                            Property(
+                                "industries",
+                                ArrayType(
+                                    ObjectType(
+                                        Property("id", StringType),
+                                        Property("name", StringType),
+                                    )
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
                 Property("family_statuses", ArrayType(ObjectType())),
                 Property("flexible_spec", ArrayType(ObjectType())),
                 Property("friends_of_connections", ArrayType(ObjectType())),
