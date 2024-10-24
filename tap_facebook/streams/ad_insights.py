@@ -54,8 +54,8 @@ EXCLUDED_FIELDS = [
     "video_thruplay_watched_actions",
 ]
 
-SLEEP_TIME_INCREMENT = 5
-INSIGHTS_MAX_WAIT_TO_START_SECONDS = 5 * 60
+SLEEP_TIME_INCREMENT = 10
+INSIGHTS_MAX_WAIT_TO_START_SECONDS = 15 * 60
 INSIGHTS_MAX_WAIT_TO_FINISH_SECONDS = 30 * 60
 
 
@@ -279,7 +279,7 @@ class AdsInsightStream(Stream):
                 "breakdowns": self._report_definition["breakdowns"],
                 "fields": columns,
                 "time_increment": time_increment,
-                "limit": 100,
+                "limit": self.config["limit"],
                 "action_attribution_windows": [
                     self._report_definition["action_attribution_windows_view"],
                     self._report_definition["action_attribution_windows_click"],
