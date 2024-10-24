@@ -259,7 +259,10 @@ class AdsetsStream(IncrementalFacebookStream):
                         Property("interests", ArrayType(ObjectType())),
                     ),
                 ),
-                Property("targeting_automation", StringType),
+                Property(
+                    "targeting_automation",
+                    ObjectType((Property("advantage_audience", IntegerType))),
+                ),
                 Property("genders", ArrayType(IntegerType)),
                 Property("brand_safety_content_filter_levels", ArrayType(StringType)),
                 Property("publisher_platforms", ArrayType(StringType)),
