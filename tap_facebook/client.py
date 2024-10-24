@@ -83,7 +83,7 @@ class FacebookStream(RESTStream):
         Returns:
             A dictionary of URL query parameters.
         """
-        params: dict = {"limit": 25}
+        params: dict = {"limit": self.config["limit"]}
         if next_page_token is not None:
             params["after"] = next_page_token
         if self.replication_key:
@@ -108,7 +108,11 @@ class FacebookStream(RESTStream):
             self.logger.info(msg)
             return
 
-        if HTTPStatus.BAD_REQUEST <= response.status_code < HTTPStatus.INTERNAL_SERVER_ERROR:
+        if (
+            HTTPStatus.BAD_REQUEST
+            <= response.status_code
+            < HTTPStatus.INTERNAL_SERVER_ERROR
+        ):
             msg = (
                 f"{response.status_code} Client Error: "
                 f"{response.content!s} (Reason: {response.reason}) for path: {full_path}"
@@ -158,7 +162,7 @@ class IncrementalFacebookStream(FacebookStream):
         Returns:
             A dictionary of URL query parameters.
         """
-        params: dict = {"limit": 25}
+        params: dict = {"limit": self.config["limit"]}
         if next_page_token is not None:
             params["after"] = next_page_token
         if self.replication_key:
