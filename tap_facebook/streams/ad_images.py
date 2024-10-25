@@ -51,6 +51,7 @@ class AdImages(FacebookStream):
     tap_stream_id = "adimages"
     replication_method = REPLICATION_INCREMENTAL
     replication_key = "id"
+    primary_keys = ["id"]
     schema = PropertiesList(
         Property("id", StringType),
         Property("account_id", StringType),
