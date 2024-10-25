@@ -54,8 +54,8 @@ EXCLUDED_FIELDS = [
     "video_thruplay_watched_actions",
 ]
 
-INSIGHTS_MAX_RETRIES = 5
-SLEEP_TIME_INCREMENT = 15
+INSIGHTS_MAX_RETRIES = 10
+SLEEP_TIME_INCREMENT = 20
 INSIGHTS_MAX_WAIT_TO_START_SECONDS = 15 * 60
 INSIGHTS_MAX_WAIT_TO_FINISH_SECONDS = 30 * 60
 
@@ -221,7 +221,7 @@ class AdsInsightStream(Stream):
                         max_retries,
                     )
                     time.sleep(
-                        SLEEP_TIME_INCREMENT * retry_count
+                        SLEEP_TIME_INCREMENT * retry_count**2
                     )  # Exponential backoff
                     continue
                 raise  # Re-raise the last error if we've exhausted retries
