@@ -31,6 +31,7 @@ class CustomAudiences(FacebookStream):
 
     name = "customaudiences"
     primary_keys = ["id"]  # noqa: RUF012
+    tap_stream_id = "customaudiences"
 
     @property
     def path(self) -> str:
