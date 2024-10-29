@@ -285,6 +285,8 @@ class AdsInsightStream(Stream):
         context: dict | None,
     ) -> t.Iterable[dict | tuple[dict, dict | None]]:
         self._initialize_client()
+        max_retries = INSIGHTS_MAX_RETRIES
+        retry_count = 0
 
         time_increment = self._report_definition["time_increment_days"]
 
@@ -321,11 +323,11 @@ class AdsInsightStream(Stream):
             except FacebookRequestError as e:
                 self.logger.error("Error fetching results: %s", str(e))
                 retry_count += 1
-                if retry_count < INSIGHTS_MAX_RETRIES:
+                if retry_count < max_retries:
                     self.logger.info(
                         "Retrying result fetch %d/%d...",
                         retry_count,
-                        INSIGHTS_MAX_RETRIES,
+                        max_retries,
                     )
                     time.sleep(
                         SLEEP_TIME_INCREMENT * retry_count**2

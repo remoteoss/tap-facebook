@@ -125,12 +125,9 @@ class FacebookStream(RESTStream):
                 response.status_code == HTTPStatus.BAD_REQUEST
                 and "request limit reached" in str(response.content).lower()
             ):
-                # Log X-Business-Use-Case-Usage header if present
-                if "X-Business-Use-Case-Usage" in response.headers:
-                    self.logger.info(
-                        "X-Business-Use-Case-Usage: %s",
-                        response.headers["X-Business-Use-Case-Usage"],
-                    )
+                for header in ["X-Business-Use-Case-Usage", "X-App-Usage"]:
+                    if header in response.headers:
+                        self.logger.info("%s: %s", header, response.headers[header])
                 raise RetriableAPIError(msg, response)
 
             raise FatalAPIError(msg)
