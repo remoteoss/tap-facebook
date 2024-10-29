@@ -7,6 +7,7 @@ import typing as t
 from functools import lru_cache
 
 import facebook_business.adobjects.user as fb_user
+from facebook_business.exceptions import FacebookRequestError
 import pendulum
 from facebook_business.adobjects.adaccount import AdAccount
 from facebook_business.adobjects.adreportrun import AdReportRun
@@ -211,7 +212,7 @@ class AdsInsightStream(Stream):
                 msg = "Job failed to complete for unknown reason"
                 raise RuntimeError(msg)
 
-            except RuntimeError as e:
+            except (RuntimeError, FacebookRequestError) as e:
                 retry_count += 1
                 if retry_count < max_retries:
                     self.logger.info(
