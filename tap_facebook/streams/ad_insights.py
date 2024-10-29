@@ -315,8 +315,23 @@ class AdsInsightStream(Stream):
                 },
             }
             job = self._run_job_to_completion(params)
-            for obj in job.get_result():
-                yield obj.export_all_data()
+            try:
+                for obj in job.get_result():
+                    yield obj.export_all_data()
+            except FacebookRequestError as e:
+                self.logger.error("Error fetching results: %s", str(e))
+                retry_count += 1
+                if retry_count < INSIGHTS_MAX_RETRIES:
+                    self.logger.info(
+                        "Retrying result fetch %d/%d...",
+                        retry_count,
+                        INSIGHTS_MAX_RETRIES,
+                    )
+                    time.sleep(
+                        SLEEP_TIME_INCREMENT * retry_count**2
+                    )  # Exponential backoff
+                    continue
+                raise  # Re-raise if we've exhausted retries
             # Bump to the next increment
             report_start = report_start.add(days=time_increment)
             report_end = report_end.add(days=time_increment)
