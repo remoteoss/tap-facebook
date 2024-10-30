@@ -83,7 +83,9 @@ class FacebookStream(RESTStream):
         Returns:
             A dictionary of URL query parameters.
         """
-        params: dict = {"limit": self.config["limit"]}
+        params: dict = {
+            "limit": self.custom_limit if self.custom_limit else self.config["limit"]
+        }
         if next_page_token is not None:
             params["after"] = next_page_token
         if self.replication_key:
@@ -165,7 +167,9 @@ class IncrementalFacebookStream(FacebookStream):
         Returns:
             A dictionary of URL query parameters.
         """
-        params: dict = {"limit": self.config["limit"]}
+        params: dict = {
+            "limit": self.custom_limit if self.custom_limit else self.config["limit"]
+        }
         if next_page_token is not None:
             params["after"] = next_page_token
         if self.replication_key:
