@@ -22,6 +22,7 @@ class FacebookStream(RESTStream):
 
     # add account id in the url
     # path and fields will be added to this url in streams.pys
+    custom_limit: int | None = None  # Add this line to define custom_limit property
 
     @property
     def url_base(self) -> str:
